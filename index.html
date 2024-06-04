@@ -246,18 +246,19 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            background: url('https://tint.creativemarket.com/jbWs3bqOxqXtXXF_envHvL0zKgLrpblKZdwociVS-ro/width:1200/height:800/gravity:nowe/rt:fill-down/el:1/czM6Ly9maWxlcy5jcmVhdGl2ZW1hcmtldC5jb20vaW1hZ2VzL3NjcmVlbnNob3RzL3Byb2R1Y3RzLzY5OC82OTg3LzY5ODcyMzIvMi1vLmpwZw?1568805886&fmt=webp.jfif') no-repeat center center fixed; 
+            background: url('https://wallpapercave.com/wp/wp3423610.jpg') no-repeat center center fixed; 
             background-size: cover;
         }
 
         #landing-page button {
-            background-color: #FFFFFF; /* White background */
-            color: #000000; /* Black text color for contrast */
+            background-color: #FFA500; 
+            margin-top: 620px;
+            color: #FFFFFF;
         }
 
         /* You can also add a hover effect if needed */
         #landing-page button:hover {
-            background-color: #f0f0f0; /* Slightly darker white on hover */
+            background-color: #FF4500; 
         }
 
         .title-container {
@@ -267,17 +268,68 @@
         
         h1.title {
             margin: 0;
-            font-size: 3em;
+            font-size: 50px;
             color: white;
+        }
+
+        .centered-button {
+            display: block;
+            margin: 20px auto;
+        }
+
+        body, html {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        #landing-page {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            width: 100%;
+        }
+        
+        #other-section {
+            display: none;
+            height: 100%;
+            width: 100%;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        
+        #done {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+        }
+        
+        .center {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .normal {
+            position: static;
+            transform: none;
         }
     </style>
 </head> 
 <body>
     <div id="landing-page">
-        <button onclick="showFormPage()">Get Started</button>
+        <button id="get-started">Get Started</button>
     </div>
-   
-    <h1 class="title"> NASA Task Load Index (TLX)</h1>
+    <div id="other-section">
+        <button id="done">Done</button>
+    </div>
+
+    <h1 class="title">Task Load Index (TLX)</h1>
     <div class="container" id="form-page" style="display:none;">
         <h2>Participant Information</h2>
         <form id="info-form">
@@ -384,6 +436,16 @@
     </div>  
 
     <script>
+        document.getElementById('get-started').addEventListener('click', showFormPage);
+            // To ensure the "Get Started" button is in the normal position when navigating back
+            window.addEventListener("popstate", function() {
+                getStartedButton.classList.add("normal");
+                getStartedButton.classList.remove("center");
+                landingPage.style.display = "flex";
+                otherSection.style.display = "none";
+            });
+        
+
         const factors = ['Mental Demand', 'Physical Demand', 'Temporal Demand', 'Performance', 'Effort', 'Frustration'];
         const participants = [];
         const weights = {
@@ -428,20 +490,20 @@
             document.getElementById('pair-comparison-page').style.display = 'block';
         
             const pairComparisons = [
-                ['Mental Demand', 'Physical Demand'],
+                ['Effort', 'Performance'],
+                ['Frustration', 'Mental Demand'],
                 ['Mental Demand', 'Temporal Demand'],
-                ['Mental Demand', 'Performance'],
+                ['Performance', 'Mental Demand'],
                 ['Mental Demand', 'Effort'],
-                ['Mental Demand', 'Frustration'],
-                ['Physical Demand', 'Temporal Demand'],
-                ['Physical Demand', 'Performance'],
-                ['Physical Demand', 'Effort'],
-                ['Physical Demand', 'Frustration'],
-                ['Temporal Demand', 'Performance'],
-                ['Temporal Demand', 'Effort'],
+                ['Mental Demand', 'Physical Demand'],
+                ['Effort', 'Physical Demand'],
                 ['Temporal Demand', 'Frustration'],
-                ['Performance', 'Effort'],
                 ['Performance', 'Frustration'],
+                ['Temporal Demand', 'Physical Demand'],
+                ['Temporal Demand', 'Effort'],
+                ['Performance', 'Temporal Demand'],
+                ['Physical Demand', 'Frustration'],
+                ['Physical Demand', 'Performance'],
                 ['Effort', 'Frustration']
             ];
         
