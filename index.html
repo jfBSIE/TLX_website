@@ -19,15 +19,47 @@
             flex-direction: column;
         }
 
-        .container {
+        .navbar {
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            overflow: hidden;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        .navbar a {
+            float: left;
+            display: block;
+            color: #f2f2f2;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-size: 17px;
+        }
+
+        .navbar a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+
+        .navbar a.active {
+            background-color: #1E90FF;
+            color: white;
+        }
+
+        .content-section {
             background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent white background */
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 800px;
+            width: 1000px;
             max-height: 3000px;
-            text-align: center;
+            text-align: left;
             color: #000000; /* Black text color inside containers */
+            margin-top: 70px; /* Adjust margin to accommodate navbar */
+            display: none;
         }
 
         h1, h2 {
@@ -301,35 +333,34 @@
             align-items: center;
             flex-direction: column;
         }
+
+        #instruction-page-1 p, #instruction-page-2 p {
+            font-size: 20px; /* Increase this value as needed */
+        }
+        
+        #instruction-page-2 ul li {
+            font-size: 20px; /* Increase this value as needed */
+        }
         
         #done {
             position: fixed;
             top: 20px;
             right: 20px;
         }
-        
-        .center {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-        
-        .normal {
-            position: static;
-            transform: none;
-        }
     </style>
-</head> 
+</head>
 <body>
-    <div id="landing-page">
-        <button id="get-started">Get Started</button>
+    <div class="navbar">
+        <a href="#home" class="active" onclick="showContent('home')">Home</a>
+        <a href="#about" onclick="showContent('about')">About NASA-TLX</a>
+        <a href="#questionnaire" onclick="showContent('questionnaire')">NASA-TLX Questionnaire</a>
+        <a href="#contact" onclick="showContent('contact')">Contact Us</a>
     </div>
-    <div id="other-section">
-        <button id="done">Done</button>
+    
+    <div id="landing-page">
+        <button id="getStartedButton" class="centered-button">Get Started</button>
     </div>
 
-    <h1 class="title">Task Load Index (TLX)</h1>
     <div class="container" id="form-page" style="display:none;">
         <h2>Participant Information</h2>
         <form id="info-form">
@@ -344,22 +375,27 @@
             <div class="input-container">
                 <label for="gender">Gender:</label>
                 <select id="gender" name="gender">
-                    <option value="none">Prefer not to say</option>
                     <option value="male">Male</option>
                     <option value="female">Female</option>
                 </select>
             </div>
             <div class="input-container">
-                <label for="block-section">Section:</label>
+                <label for="block-section">Course/Profession:</label>
                 <input type="text" id="block-section" name="block-section" required>
             </div>
             <div class="input-container">
                 <label for="occupation">Occupation:</label>
                 <input type="text" id="occupation" name="occupation" required>
             </div>
-            <button type="button" onclick="showPairComparisonPage()">Next</button>
+            <button type="button" onclick="showInstructionPage1(); this.parentElement.style.display = 'none'">Next</button>
         </form>
     </div>
+
+    <div class="container" id="instruction-page-1" style="display:none;">
+        <h2>Instruction</h2>
+        <p>Determine your source of load weight, choose between each pair of load weight sources. Identifying the Load Weight Sources you should have a clear understanding of the load weight sources available to you.</p>
+        <button type="button" onclick="showPairComparisonPage(); this.parentElement.style.display = 'none'">Next</button>
+    </div>    
 
     <div class="container" id="pair-comparison-page" style="display:none;">
         <h2>Source of Load (Weight)</h2>
@@ -371,8 +407,21 @@
             <h2>Results - Pairs</h2>
             <!-- Pair results will be displayed here -->
         </div>
-        <button type="button" onclick="goBackToFormPage()">Back</button>
-        <button type="button" onclick="showTLXPage()">Next</button>
+        <button type="button" onclick="goBackToFormPage(); this.parentElement.style.display = 'none'">Back</button>
+        <button type="button" onclick="showInstructionPage2(); this.parentElement.style.display = 'none'">Next</button>
+    </div>
+
+    <div class="container" id="instruction-page-2" style="display:none;">
+        <h2>Instruction</h2>
+        <p>Rate yourself on the magnitude that best fits you.</p>
+        <ul>
+            <li>The mental workload is Very Low: 0-20</li>
+            <li>The mental workload is Low: 21-40 </li>
+            <li>The mental workload is Moderate: 41-60</li>
+            <li>The mental workload is High: 61-80 </li>
+            <li>The mental workload is Very High: 81-100</li>
+        </ul>
+        <button type="button" onclick="showTLXPage(); this.parentElement.style.display = 'none'">Next</button>
     </div>
 
     <div class="container" id="tlx-page" style="display:none;">
@@ -425,17 +474,161 @@
             <p>Frustration: <span id="final-frustration">0</span></p>
             <h2>Perceived Workload - Global Index: <span id="tlx-score">0</span></h2>
         </div>
-        <button type="button" onclick="goBackToPairComparisonPage()">Back</button>
-        <button type="button" onclick="calculateRating()">Generate Report</button>      
+        <button type="button" onclick="goBackToPairComparisonPage(); this.parentElement.style.display = 'none'">Back</button>
+        <button type="button" onclick="calculateRating(); this.parentElement.style.display = 'none'">Generate Report</button>     
     </div>
 
     <div class="container" id="report-page" style="display:none;">
         <h2>Participants Report</h2>
         <div id="report"></div>
         <button type="button" onclick="goBackToLandingPage()">Done</button> <!-- Added Done button -->
-    </div>  
+    </div> 
+
+    <div id="other-section">
+        <div id="home" class="content-section">
+            <h1>Welcome to the NASA Task Load Index (TLX) Portal</h1>
+            <p>Discover the NASA TLX, the gold standard for measuring and analyzing subjective workload in various tasks. Our comprehensive tools and resources are designed to help researchers, professionals, and organizations understand and optimize human performance.</p>
+        </div>
+
+        <div id="about" class="content-section">
+            <h1>What is NASA TLX?</h1>
+            <p>The NASA Task Load Index (TLX) is a widely-used, multidimensional rating procedure that provides an overall workload score based on a weighted average of ratings on six subscales:</p>
+            <ul>
+                <li>Mental Demand: How much mental and perceptual activity was required?</li>
+                <li>Physical Demand: How much physical activity was required?</li>
+                <li>Temporal Demand: How much time pressure did you feel?</li>
+                <li>Performance: How successful were you in accomplishing the task?</li>
+                <li>Effort: How hard did you have to work to accomplish your level of performance?</li>
+                <li>Frustration: How insecure, discouraged, irritated, stressed, and annoyed were you?</li>
+            </ul>
+            <h2>History and Development</h2>
+            <p>The NASA TLX was developed by Sandra G. Hart and Lowell E. Staveland at NASA Ames Research Center in the 1980s. It was created to provide a reliable and valid measure of workload that could be applied across various domains and tasks.</p>
+            <h2>How to Use NASA TLX</h2>
+            <p>Step-by-Step Guide:</p>
+            <ul>
+                <li>Task Selection: Choose the task or set of tasks you want to evaluate.</li>
+                <li>Rating Scale: Ask participants to rate the task on the six subscales.</li>
+                <li>Weighting Procedure: Determine the importance of each subscale for the specific task.</li>
+                <li>Data Analysis: Calculate the overall workload score using the weighted ratings.</li>
+            </ul>
+            <h2>Example Application</h2>
+            <p>Explore how researchers use NASA TLX in different fields such as aviation, healthcare, and human-computer interaction.</p>
+            <h2>Resources: Downloadable Tools</h2>
+            <ul>
+                <li>NASA TLX Manual</li>
+                <li>TLX Rating Sheet</li>
+                <li>TLX Data Analysis Tool (Excel, Python scripts)</li>
+                <li>Research Papers and Case Studies</li>
+                <li>Key research articles</li>
+                <li>Case studies demonstrating the application of NASA TLX in various domains</li>
+                <li>Tutorial Videos</li>
+                <li>How to administer NASA TLX</li>
+                <li>Interpreting NASA TLX results</li>
+                <li>FAQs</li>
+            </ul>
+            <h2>FAQs</h2>
+            <p><strong>What is the NASA TLX used for?</strong></p>
+            <p>NASA TLX is used to measure the perceived workload of individuals performing a wide range of tasks. It helps identify areas where performance may be compromised due to high workload.</p>
+            <p><strong>Who can use NASA TLX?</strong></p>
+            <p>Researchers, professionals, and organizations across various fields including psychology, human factors, ergonomics, and more.</p>
+            <p><strong>Is there a digital version of NASA TLX?</strong></p>
+            <p>Yes, digital tools and apps are available for administering NASA TLX and analyzing the data.</p>
+            <h2>Testimonials: What Users Are Saying</h2>
+            <p>"NASA TLX has been an invaluable tool in our research, providing deep insights into the workload and performance of our participants." - Dr. Jane Smith, Cognitive Scientist</p>
+            <p>"The detailed breakdown of workload dimensions has helped us optimize our workflows and improve productivity." - John Doe, Human Factors Engineer</p>
+        </div>
+
+        <div id="questionnaire" class="content-section">
+            <h1>NASA TLX Questionnaires</h1>
+            <p>The NASA Task Load Index (TLX) questionnaires are designed to measure subjective workload across six dimensions. These questionnaires are essential tools for researchers and professionals aiming to assess and optimize human performance in various tasks.</p>
+            <h2>Dimensions Assessed by NASA TLX</h2>
+            <ul>
+                <li><em>Mental Demand</em></li>
+                <li><em>Physical Demand</em></li>
+                <li><em>Temporal Demand</em></li>
+                <li><em>Performance</em></li>
+                <li><em>Effort</em></li>
+                <li><em>Frustration</em></li>
+            </ul>
+            <h2>Components of the NASA TLX Questionnaires</h2>
+            <h3>Rating Scale Questionnaire</h3>
+            <ul>
+                <li>Participants rate each dimension on a scale from 0 (very low) to 100 (very high).</li>
+                <li>This questionnaire helps to gather subjective assessments of the workload experienced during a task.</li>
+            </ul>
+            <h3>Pairwise Comparison Questionnaire</h3>
+            <ul>
+                <li>Participants compare each pair of the six dimensions to determine which dimension is more relevant to the workload for the task.</li>
+                <li>This helps in weighting the importance of each dimension in calculating the overall workload score.</li>
+            </ul>
+            <h2>How to Administer the NASA TLX Questionnaires</h2>
+            <ul>
+                <li><strong>Preparation</strong>
+                    <ul>
+                        <li>Select the task or set of tasks you want to evaluate.</li>
+                        <li>Ensure participants understand the purpose of the assessment and the meaning of each dimension.</li>
+                    </ul>
+                </li>
+                <li><strong>Rating Scale</strong>
+                    <ul>
+                        <li>Provide the Rating Scale Questionnaire to the participants after they complete the task.</li>
+                        <li>Ask participants to rate each of the six dimensions based on their experience during the task.</li>
+                    </ul>
+                </li>
+                <li><strong>Pairwise Comparison</strong>
+                    <ul>
+                        <li>Provide the Pairwise Comparison Questionnaire.</li>
+                        <li>Participants compare each pair of dimensions (e.g., Mental Demand vs. Physical Demand) to determine which one had a greater impact on their workload.</li>
+                    </ul>
+                </li>
+                <li><strong>Data Collection</strong>
+                    <ul>
+                        <li>Collect the completed questionnaires from all participants.</li>
+                        <li>Ensure all ratings and comparisons are recorded accurately.</li>
+                    </ul>
+                </li>
+                <li><strong>Data Analysis</strong>
+                    <ul>
+                        <li>Use the ratings and pairwise comparisons to calculate the weighted workload score.</li>
+                        <li>Analyze the data to identify areas of high workload and potential improvements.</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        <div id="contact" class="content-section">
+            <h1>Contact Us</h1>
+            <p>If you have any questions or need further assistance, please contact us at:</p>
+            <p>Email: support@nasatlx.org</p>
+            <p>Phone: +639912579478</p>
+            <p>Address: NASA Ames Research Center, Moffett Field, CA 94035, USA</p>
+            <h2>Follow us on social media:</h2>
+            <p>Twitter: @NASATLX</p>
+            <p>LinkedIn: NASA Task Load Index</p>
+        </div>
+    </div>
 
     <script>
+        document.getElementById('getStartedButton').addEventListener('click', function() {
+            document.getElementById('landing-page').style.display = 'none';
+            document.getElementById('other-section').style.display = 'flex';
+            showContent('home');
+        });
+
+        function showContent(sectionId) {
+            const sections = document.getElementsByClassName('content-section');
+            for (let i = 0; i < sections.length; i++) {
+                sections[i].style.display = 'none';
+            }
+            document.getElementById(sectionId).style.display = 'block';
+
+            const navLinks = document.querySelectorAll('.navbar a');
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+            });
+            document.querySelector(`.navbar a[href="#${sectionId}"]`).classList.add('active');
+        }
+
         document.getElementById('get-started').addEventListener('click', showFormPage);
             // To ensure the "Get Started" button is in the normal position when navigating back
             window.addEventListener("popstate", function() {
@@ -473,6 +666,16 @@
             });
         
             return valid;
+        }    
+
+        function showInstructionPage1() {    
+            document.getElementById('form-page').style.display = 'none';
+            document.getElementById('instruction-page-1').style.display = 'block';
+        }
+        
+        function showInstructionPage2() {
+            document.getElementById('pair-comparison-page').style.display = 'none';
+            document.getElementById('instruction-page-2').style.display = 'block';
         }        
     
         function showFormPage() {
@@ -648,10 +851,6 @@
             document.getElementById('landing-page').style.display = 'block';
         }
 
-        function goBackToLandingPage() {
-            clearData(); // Clear all data and reset the form
-        }
-
         function goBackToFormPage() {
             document.getElementById('pair-comparison-page').style.display = 'none';
             document.getElementById('form-page').style.display = 'block';
@@ -660,6 +859,10 @@
         function goBackToPairComparisonPage() {
             document.getElementById('tlx-page').style.display = 'none';
             document.getElementById('pair-comparison-page').style.display = 'block';
+        }
+        
+        function goBackToLandingPage() {
+            clearData(); // Clear all data and reset the form
         }
         
         function calculateRating() {
@@ -755,7 +958,7 @@
                 let reportHtml = `<h3>Participant: ${participant.name}</h3>`;
                 reportHtml += `<p>Age: ${participant.age}</p>`;
                 reportHtml += `<p>Gender: ${participant.gender}</p>`;
-                reportHtml += `<p>Block Section: ${participant.blockSection}</p>`;
+                reportHtml += `<p>Course/Profession: ${participant.blockSection}</p>`;
                 reportHtml += `<p>Occupation: ${participant.occupation}</p>`;
                 reportHtml += '<table>';
                 reportHtml += '<tr><th>Factor</th><th>Weight</th><th>Rate</th><th>Weight x Rate</th><th>Individual Index</th></tr>';
@@ -776,7 +979,27 @@
         
                 reportHtml += '</table>';
                 reportHtml += `<p><strong>Perceived Workload - Global Index: ${participant.tlxScore}</strong></p>`;
+
+                const globalIndex = participant.tlxScore;
+                let interpretation = '';
+        
+                if (globalIndex >= 0 && globalIndex <= 20) {
+                    interpretation = 'The mental workload is Very Low.';
+                } else if (globalIndex >= 21 && globalIndex <= 40) {
+                    interpretation = 'The mental workload is Low.';
+                } else if (globalIndex >= 41 && globalIndex <= 60) {
+                    interpretation = 'The mental workload is Moderate.';
+                } else if (globalIndex >= 61 && globalIndex <= 80) {
+                    interpretation = 'The mental workload is High.';
+                } else if (globalIndex >= 81 && globalIndex <= 100) {
+                    interpretation = 'The mental workload is Very High.';
+                }
+        
+                reportHtml += `<p><strong>Global Index Interpretation:</strong> ${interpretation}</p>`; 
+        
                 reportContainer.innerHTML += reportHtml;
             });
-        } 
+        }
     </script>
+
+
